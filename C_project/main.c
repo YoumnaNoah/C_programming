@@ -8,10 +8,11 @@
 void main(){
 u8 Mode;
 printf("enter 1 to enter admin mode\n enter 2 to enter client mode\n");
+printf("to exit enter 0");
 scanf("%d",&Mode);
 
 
-	while()
+	while(Mode!=0){
 	
 	switch(Mode){
 		
@@ -24,5 +25,5 @@ scanf("%d",&Mode);
 			
 		break;
 	}
-		
+	}	
 }
