@@ -7,21 +7,7 @@
 #include <time.h>
 #include <stdbool.h>
 	FILE*fptr;
-
-typedef struct _1 {
-	u8  name[70];
-	u8  address[100];
-	u8  National_ID[14];
-	u16 age;
-	u32 Acc_ID;
-	u8  guardian[70];
-	u8  guardian_nat_ID[14];
-	u8  Account_status[20];
-	u32 Balance;
-	u32 Acc_password;
-	
-	
-}client;
+ 
 u8 ACC_ID_S[20];
 client tot_clients[300];
 client client_1;
@@ -32,11 +18,14 @@ u8 filename[20];
 client mem_1;
 u8 num=0;
 //the function checks the password and the username
+//void choose_window(void){
+
+//}
 void admin_Pass(void){
-	u8 Username[8] = "youmna"; 
+	u8 Username[8] = "youmna"; //admin username
 	u8 in_username[8];
 	u8 comp_user;
-	u8 password[]= "51610153";
+	u8 password[]= "51610153"; //admin password
 	u8 entry_pass[15];
 	u8 comp;
 printf("enter the username\n"); 
@@ -46,11 +35,11 @@ if (comp_user==0) //condition check 0 means the two strings match
 	{
 	printf("enter your password\n");
 	scanf("%s",&entry_pass); //scan password
+	fflush(stdin);
 	comp=strcmp(password,entry_pass); //compare the password entered with the one saved in the system
 	if(comp==0) //conditions check 0 means the two passwords match
 	{
 		admin(); //call admin function  
-	printf("true");
 	}
 	else{
 		printf("wrong password"); //else for the password check
@@ -60,7 +49,6 @@ if (comp_user==0) //condition check 0 means the two strings match
 else{
 	printf("wrong username\n"); //else for the username check
 }
-
 }
 
 //admin function to choose the operation
@@ -69,10 +57,11 @@ void admin(void){
 	u8 admin_option;
 	u8 check;
 	
+	
 	while (again)
 	{ 
 	
-	printf("enter 1 to create new account\n 2 to open existing account\n 3 to exit system\n");
+	printf("enter 1 to create new account\n 2 to open existing account\n 5 to return to main_menu\n");
 	scanf("%d",&admin_option); //scan admin option
 	switch (admin_option){
 		case new_account: create_acc();
@@ -82,6 +71,7 @@ void admin(void){
 		
 		case open_account:exis_acc(); //exis_acc();
 		break;
+		
 		
 		
 	}
@@ -158,7 +148,7 @@ void create_acc(void){
 	//generate random account ID .. still needs improvment
 		srand(time(NULL));
 	mem_1.Acc_ID = rand()%(9999999999 - 1000000000 + 1) + 1000000000;
-	printf("%d\n",mem_1.Acc_ID);
+	printf("The account ID is: %d\n",mem_1.Acc_ID);
 	//fprintf(fptr,"%d|",mem_1.Acc_ID);
 	//to test using array of objects
 	client_1.Acc_ID = mem_1.Acc_ID;
@@ -201,7 +191,7 @@ void create_acc(void){
 	fclose(fptr); //close file
 	
 }
-	
+	//store the data of the struct into array
 void set_data(u16 index){
 		strcpy(tot_clients[index].name,client_1.name);
 		strcpy(tot_clients[index].address,client_1.address);
@@ -246,15 +236,17 @@ void exis_acc(void){
 		
 	}
 	
-	
 	//fread(&mem_1,sizeof(client),1,fptr);
 	//fclose(fptr);
+	
+	
 	//print possible operations to perforn on exisiting account
 	printf("enter 1 to make transaction\n  ");
 	printf("enter 2 to change_status\n");
 	printf("enter 3 to get cash \n");
 	printf("enter 4 to deposit\n ");
 	printf("enter 5 to return to main menu\n");
+	
 	//scan the user choice
 	scanf("%d",&exis_acc_option);
 	fflush(stdin);
@@ -270,6 +262,10 @@ void exis_acc(void){
 		
 		case deposit: deposit_fun();
 		break;
+		
+		
+		case main_menu_return: break;
+		
 		
 	}
 }
@@ -316,68 +312,10 @@ void withdraw(void){
 }
 }
 
+//deposit into account function
 void deposit_fun(void){
 	u32 deposit_ammount;
 	printf("enter the amount of money you want to deposit\n");
 		scanf("%d",&deposit_ammount);
 		tot_clients[num].Balance=tot_clients[num].Balance+deposit_ammount;
-}
-void client_Mode(void){
-	u32 client_in_pass;
-	u8 client_acc_option;
-	u32 ID_OP_A;
-	
-	//get the ID Account you wat to operate on
-	printf("enter the account ID of the account you want to open\n");
-	scanf("%d",&ID_OP_A);
-	fflush(stdin);
-	//search for the iD in the array to compare it with the entered value
-	for(u32 i=0;i<300;i++){
-		if(tot_clients[i].Acc_ID == ID_OP_A){
-			printf("enter your password\n");
-			scanf("%d",&client_in_pass);
-			if(tot_clients[i].Acc_password == client_in_pass){
-			num=i;
-			}
-		}else{
-			printf("wrong password");
-		}
-	}
-	printf("welcome to client mode\n");
-	//ptint possible operations to perforn on exisiting account
-	printf("enter 1 to make transaction\n  ");
-	printf("enter 2 to change password\n");
-	printf("enter 3 to get cash \n");
-	printf("enter 4 to deposit\n ");
-	printf("enter 5 to return to main menu\n");
-	//scan the user choice
-	scanf("%d",&client_acc_option);
-	fflush(stdin);
-	switch (client_acc_option){
-		case Make_transaction: make_trans();
-		break;
-		
-		case change_status: change_password();
-		break;
-		
-		case  get_cash:withdraw();
-		break;
-		
-		case deposit: deposit_fun();
-		break;
-		
-		
-	}
-}
-
-void change_password(void){
-	u32 new_password;
-	printf("please enter your old password\n");
-	scanf("%d",&new_password);
-	tot_clients[num].Acc_password=new_password;
-	if(tot_clients[num].Acc_password== new_password){
-		printf("your password has been updated succesfully\n");
-	}else{
-		printf("something went wrong");
-	}
 }

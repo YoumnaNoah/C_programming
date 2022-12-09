@@ -18,6 +18,22 @@
 #define main_menu_return 5
 
 
+typedef struct _1 {
+	u8  name[70];
+	u8  address[100];
+	u8  National_ID[14];
+	u16 age;
+	u32 Acc_ID;
+	u8  guardian[70];
+	u8  guardian_nat_ID[14];
+	u8  Account_status[20];
+	u32 Balance;
+	u32 Acc_password;
+	
+	
+}client;
+
+//void choose_window(void);
 void admin_Pass(void);
 void admin(void);
 void create_acc(void);
